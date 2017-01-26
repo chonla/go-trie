@@ -1,5 +1,16 @@
 package trie
 
+import (
+	"bufio"
+	"os"
+)
+
+// OpenFile is os.Open wrapper, to ease mocking
+var OpenFile = os.Open
+
+// GetScanner is bufio.NewScanner wrapper, to ease mocking
+var GetScanner = bufio.NewScanner
+
 // ITrie defines interface for trie
 type ITrie interface {
 	Add(v string)
@@ -27,6 +38,35 @@ func (d *Dictionary) LoadStringSet(ta []string) {
 // LoadString is to load a string into dictionary
 func (d *Dictionary) LoadString(t string) {
 	d.trie.Add(t)
+}
+
+// LoadFile is to load from a file
+func (d *Dictionary) LoadFile(f string) error {
+	l, e := d.readLines(f)
+
+	if e != nil {
+		return e
+	}
+
+	d.LoadStringSet(l)
+
+	return nil
+}
+
+func (d *Dictionary) readLines(f string) ([]string, error) {
+	file, err := OpenFile(f)
+	if err != nil {
+		return []string{}, err
+	}
+	defer file.Close()
+
+	var lines []string
+	scanner := GetScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines, nil
 }
 
 // Has if a string is contained in trie

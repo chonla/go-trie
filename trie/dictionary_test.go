@@ -1,8 +1,15 @@
 package trie
 
 import (
+	"bufio"
+	"io"
 	"testing"
 
+	"bytes"
+	"errors"
+	"os"
+
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -72,4 +79,36 @@ func TestDictionaryShouldCallTrieClear(t *testing.T) {
 	d.Clear()
 
 	trie.AssertCalled(t, "Clear")
+}
+
+func TestDictionaryShouldReturnErrorIfLoadFileFail(t *testing.T) {
+	OpenFile = func(f string) (*os.File, error) {
+		return nil, errors.New("error")
+	}
+
+	d := NewDict()
+	e := d.LoadFile("somefile")
+
+	assert.Error(t, e)
+}
+
+func TestDictionaryShouldReturnFileContentAsStringArray(t *testing.T) {
+	OpenFile = func(f string) (*os.File, error) {
+		return os.NewFile(0, "test"), nil
+	}
+
+	GetScanner = func(f io.Reader) *bufio.Scanner {
+		buf := bytes.NewBufferString("test\ndata")
+		return bufio.NewScanner(buf)
+	}
+
+	d := NewDict()
+	e := d.LoadFile("somefile")
+	r1 := d.Has("data")
+	r2 := d.Has("test")
+	d.Clear()
+
+	assert.Nil(t, e)
+	assert.True(t, r1, "Text data should exist in dictionary, but not")
+	assert.True(t, r2, "Text test should exist in dictionary, but not")
 }
