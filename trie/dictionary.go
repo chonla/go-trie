@@ -1,5 +1,12 @@
 package trie
 
+// ITrie defines interface for trie
+type ITrie interface {
+	Add(v string)
+	Has(v string) bool
+	Clear()
+}
+
 // Dictionary represent a dictionary
 type Dictionary struct {
 	trie ITrie

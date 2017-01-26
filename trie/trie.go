@@ -1,12 +1,5 @@
 package trie
 
-// ITrie defines interface for trie
-type ITrie interface {
-	Add(v string)
-	Has(v string) bool
-	Clear()
-}
-
 // Trie is Trie structure
 type Trie struct {
 	Root *Node
