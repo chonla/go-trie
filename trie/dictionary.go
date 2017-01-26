@@ -1,17 +1,13 @@
-package dict
-
-import (
-	"../trie"
-)
+package trie
 
 // Dictionary represent a dictionary
 type Dictionary struct {
-	trie trie.ITrie
+	trie ITrie
 }
 
 // NewDict is to create a new dictionary
 func NewDict() *Dictionary {
-	return &Dictionary{trie: trie.NewTrie()}
+	return &Dictionary{trie: NewTrie()}
 }
 
 // LoadStringSet is to load array of string into dictionary
