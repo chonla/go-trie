@@ -41,7 +41,7 @@ func TestDictionaryShouldCallTrieAddWhenLoadNewString(t *testing.T) {
 	d.LoadString(arg)
 
 	trie.AssertCalled(t, "Add", arg)
-	assert.Equal(t, len(arg), d.MaxLength)
+	assert.Equal(t, len(arg), d.Depth())
 }
 
 func TestDictionaryShouldCallTrieAddAsTheNumberOfLoadedSetOfString(t *testing.T) {
@@ -55,7 +55,7 @@ func TestDictionaryShouldCallTrieAddAsTheNumberOfLoadedSetOfString(t *testing.T)
 	d.LoadStringSet(arg)
 
 	trie.AssertNumberOfCalls(t, "Add", len(arg))
-	assert.Equal(t, 4, d.MaxLength)
+	assert.Equal(t, 4, d.Depth())
 }
 
 func TestDictionaryShouldReturnTrieHas(t *testing.T) {
@@ -81,7 +81,7 @@ func TestDictionaryShouldCallTrieClear(t *testing.T) {
 	d.Clear()
 
 	trie.AssertCalled(t, "Clear")
-	assert.Equal(t, 0, d.MaxLength)
+	assert.Equal(t, 0, d.Depth())
 }
 
 func TestDictionaryShouldReturnErrorIfLoadFileFail(t *testing.T) {
