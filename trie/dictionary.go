@@ -20,12 +20,13 @@ type ITrie interface {
 
 // Dictionary represent a dictionary
 type Dictionary struct {
-	trie ITrie
+	trie      ITrie
+	MaxLength int
 }
 
 // NewDict is to create a new dictionary
 func NewDict() *Dictionary {
-	return &Dictionary{trie: NewTrie()}
+	return &Dictionary{trie: NewTrie(), MaxLength: 0}
 }
 
 // LoadStringSet is to load array of string into dictionary
@@ -38,6 +39,10 @@ func (d *Dictionary) LoadStringSet(ta []string) {
 // LoadString is to load a string into dictionary
 func (d *Dictionary) LoadString(t string) {
 	d.trie.Add(t)
+	l := len([]rune(t))
+	if l > d.MaxLength {
+		d.MaxLength = l
+	}
 }
 
 // LoadFile is to load from a file
@@ -77,4 +82,5 @@ func (d *Dictionary) Has(t string) bool {
 // Clear is to clear dictionary
 func (d *Dictionary) Clear() {
 	d.trie.Clear()
+	d.MaxLength = 0
 }
